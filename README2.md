@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Trojan Records Shop
 
 **Edit a file directly in GitHub**
@@ -23,3 +24,6 @@ This project is built with .
 - React
 - shadcn-ui
 - Tailwind CSS
+=======
+# Trojan69RecordShop
+>>>>>>> main
