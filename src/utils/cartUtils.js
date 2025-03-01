@@ -1,4 +1,3 @@
-
 const CART_STORAGE_KEY = 'vinyl_haven_cart';
 
 // Get cart from localStorage
@@ -11,7 +10,7 @@ export const getCart = () => {
 export const addToCart = (record, quantity = 1) => {
   const cart = getCart();
   const existingItemIndex = cart.findIndex(item => item.record.id === record.id);
-  
+
   if (existingItemIndex !== -1) {
     // Item already exists, update quantity
     cart[existingItemIndex].quantity += quantity;
@@ -19,7 +18,7 @@ export const addToCart = (record, quantity = 1) => {
     // Add new item
     cart.push({ record, quantity });
   }
-  
+
   localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
 };
 
@@ -34,7 +33,7 @@ export const removeFromCart = (recordId) => {
 export const updateCartItemQuantity = (recordId, quantity) => {
   const cart = getCart();
   const existingItemIndex = cart.findIndex(item => item.record.id === recordId);
-  
+
   if (existingItemIndex !== -1 && quantity > 0) {
     cart[existingItemIndex].quantity = quantity;
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
@@ -58,4 +57,16 @@ export const getCartTotal = () => {
 export const getCartItemsCount = () => {
   const cart = getCart();
   return cart.reduce((count, item) => count + item.quantity, 0);
+};
+
+// Export CartItem as an object structure
+export const CartItem = {
+  record: {
+    id: Number,
+    title: String,
+    artist: String,
+    cover: String,
+    price: Number,
+  },
+  quantity: Number,
 };

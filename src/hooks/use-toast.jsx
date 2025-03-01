@@ -1,12 +1,14 @@
-import * as React from "react";
-
-import { ToastActionElement, ToastProps } from "@/components/ui/toast";
+import React from "react";
+import * as ToastPrimitives from "@radix-ui/react-toast";
+import { ToastAction } from "@/components/ui/toast";
+import { X } from "lucide-react";
 
 const TOAST_LIMIT = 1;
 const TOAST_REMOVE_DELAY = 1000000;
 
 let count = 0;
 
+// Function to generate unique toast IDs
 function genId() {
   count = (count + 1) % Number.MAX_SAFE_INTEGER;
   return count.toString();
@@ -21,6 +23,7 @@ const actionTypes = {
 
 const toastTimeouts = new Map();
 
+// Add to the remove queue
 const addToRemoveQueue = (toastId) => {
   if (toastTimeouts.has(toastId)) {
     return;
@@ -37,6 +40,7 @@ const addToRemoveQueue = (toastId) => {
   toastTimeouts.set(toastId, timeout);
 };
 
+// Reducer to manage state transitions
 export const reducer = (state, action) => {
   switch (action.type) {
     case "ADD_TOAST":
@@ -84,12 +88,15 @@ export const reducer = (state, action) => {
         ...state,
         toasts: state.toasts.filter((t) => t.id !== action.toastId),
       };
+    default:
+      return state;
   }
 };
 
 const listeners = [];
 let memoryState = { toasts: [] };
 
+// Dispatch function to update state and notify listeners
 function dispatch(action) {
   memoryState = reducer(memoryState, action);
   listeners.forEach((listener) => {
@@ -97,6 +104,7 @@ function dispatch(action) {
   });
 }
 
+// Toast creation function
 function toast({ ...props }) {
   const id = genId();
 
@@ -126,6 +134,7 @@ function toast({ ...props }) {
   };
 }
 
+// Custom hook to use toast
 function useToast() {
   const [state, setState] = React.useState(memoryState);
 
@@ -145,5 +154,48 @@ function useToast() {
     dismiss: (toastId) => dispatch({ type: "DISMISS_TOAST", toastId }),
   };
 }
+
+// Toast component - Now integrated with Radix Toast UI components
+const Toast = ({ toast, dismissToast }) => (
+  <ToastPrimitives.Root
+    key={toast.id}
+    open={toast.open}
+    onOpenChange={(open) => {
+      if (!open) dismissToast();
+    }}
+  >
+    <div className="flex justify-between items-center">
+      <div className="space-x-2">
+        <ToastPrimitives.Title>{toast.title}</ToastPrimitives.Title>
+        <ToastPrimitives.Description>{toast.description}</ToastPrimitives.Description>
+      </div>
+      <ToastAction
+        className="ml-2"
+        onClick={dismissToast}
+      >
+        <X className="w-4 h-4" />
+      </ToastAction>
+    </div>
+  </ToastPrimitives.Root>
+);
+
+// Main component for Toast UI
+export const ToastProvider = () => {
+  const { toasts, dismiss } = useToast();
+
+  return (
+    <ToastPrimitives.Provider>
+      <ToastPrimitives.Viewport className="fixed top-0 right-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]">
+        {toasts.map((toast) => (
+          <Toast
+            key={toast.id}
+            toast={toast}
+            dismissToast={() => dismiss(toast.id)}
+          />
+        ))}
+      </ToastPrimitives.Viewport>
+    </ToastPrimitives.Provider>
+  );
+};
 
 export { useToast, toast };
