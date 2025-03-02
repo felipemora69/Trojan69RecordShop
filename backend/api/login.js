@@ -3,6 +3,8 @@ import User from '../models/userModel';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
+const jwtSecret = process.env.JWT_SECRET;
+
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     const { email, password } = req.body;

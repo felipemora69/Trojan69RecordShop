@@ -3,6 +3,8 @@ import User from "../models/User";
 import jwt from "jsonwebtoken";
 const router = express.Router();
 
+const jwtSecret = process.env.JWT_SECRET;
+
 // Register new user
 router.post("/signup", async (req, res) => {
   const { name, email, password } = req.body;
