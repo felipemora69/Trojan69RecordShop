@@ -11,7 +11,6 @@ import Cart from "./pages/Cart";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Signup from "./pages/Account";
-import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
