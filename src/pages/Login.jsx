@@ -1,26 +1,56 @@
-
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/records"); // Redirect to records
+    }
+  }, [navigate]);
   
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simulate authentication delay
-    setTimeout(() => {
-      toast({
-        title: "Login successful",
-        description: "Welcome back to Vinyl Haven!",
+    try {
+      const response = await fetch("https://trojan69record-shop.vercel.app/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
       });
+
+      const data = await response.json();
+      if (response.ok) {
+        localStorage.setItem("token", data.token);
+        toast({
+          title: "Login successful",
+          description: "Welcome back to Vinyl Haven!",
+        });
+        navigate("/account");
+      } else {
+        toast({
+          title: "Login failed",
+          description: data.message,
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Error",
+        description: "An error occurred during login.",
+      });
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
   
   return (

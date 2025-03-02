@@ -47,7 +47,6 @@ export default function NavBar() {
         <nav className="hidden md:flex items-center space-x-8">
           <NavLink to="/" active={location.pathname === '/'}>Home</NavLink>
           <NavLink to="/records" active={location.pathname.startsWith('/records')}>Records</NavLink>
-          <NavLink to="/about" active={location.pathname === '/about'}>About</NavLink>
         </nav>
         
         <div className="flex items-center space-x-5">

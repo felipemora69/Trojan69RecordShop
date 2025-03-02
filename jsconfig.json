@@ -11,5 +11,5 @@
     },
     "allowJs": true
   },
-  "include": ["src"]
+  "include": ["src", "backend/api/routes", "backend/api/mongodb.js", "backend/api/server.js", "backend/api/models"]
 }

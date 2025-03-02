@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 
 const Signup = () => {
@@ -8,20 +7,35 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
-    // Simulate signup delay
-    setTimeout(() => {
-      toast({
-        title: "Account created",
-        description: "Your account has been created successfully!",
+  
+    try {
+      const response = await fetch("/api/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, password }),
       });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        toast.success('Account created successfully!');
+        navigate('/account');
+      } else {
+        toast.error(data.message || 'Signup failed');
+      }
+    } catch (error) {
+      toast.error('Something went wrong!');
+    } finally {
       setIsLoading(false);
-    }, 1500);
-  };
+    }
+  };  
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
@@ -29,7 +43,7 @@ const Signup = () => {
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-2">Create an account</h1>
           <p className="text-muted-foreground">
-            Join Vinyl Haven to start your vinyl collection
+            Join Trojan Record Shop to start your vinyl collection
           </p>
         </div>
 
