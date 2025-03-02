@@ -9,12 +9,14 @@ const Signup = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
   
     try {
-      const response = await fetch("/api/signup", {
+      const response = await fetch("https://trojan69record-shop.vercel.app/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -26,7 +28,7 @@ const Signup = () => {
   
       if (response.ok) {
         toast.success('Account created successfully!');
-        navigate('/account');
+        navigate('/profile');
       } else {
         toast.error(data.message || 'Signup failed');
       }
@@ -123,11 +125,6 @@ const Signup = () => {
             </p>
           </div>
         </div>
-
-        <p className="text-xs text-center text-muted-foreground mt-8">
-          By creating an account, you agree to our Terms of Service and Privacy Policy.
-          This is a demo application. No actual account is created.
-        </p>
       </div>
     </div>
   );

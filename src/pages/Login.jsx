@@ -8,10 +8,12 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      navigate("/records"); // Redirect to records
+      navigate("/profile");
     }
   }, [navigate]);
   
@@ -33,9 +35,9 @@ const Login = () => {
         localStorage.setItem("token", data.token);
         toast({
           title: "Login successful",
-          description: "Welcome back to Vinyl Haven!",
+          description: "Welcome back to Trojan Record Shop!",
         });
-        navigate("/account");
+        navigate("/profile");
       } else {
         toast({
           title: "Login failed",
@@ -125,10 +127,6 @@ const Login = () => {
             </p>
           </div>
         </div>
-        
-        <p className="text-xs text-center text-muted-foreground mt-8">
-          This is a demo application. No actual authentication is performed.
-        </p>
       </div>
     </div>
   );

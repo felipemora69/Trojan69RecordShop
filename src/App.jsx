@@ -10,7 +10,7 @@ import RecordDetail from "./pages/RecordDetail";
 import Cart from "./pages/Cart";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import Account from "./pages/Account";
+import Profile from "./pages/Profile";
 
 const queryClient = new QueryClient();
 
@@ -28,7 +28,7 @@ const App = () => (
             <Route path="/cart" element={<Cart />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/account" element={<Account />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </Layout>
       </BrowserRouter>

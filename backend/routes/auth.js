@@ -1,7 +1,6 @@
-const express = require("express");
-const User = require("../../models/User");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
+import express from "express";
+import User from "../models/User";
+import jwt from "jsonwebtoken";
 const router = express.Router();
 
 // Register new user
@@ -44,11 +43,13 @@ router.post("/login", async (req, res) => {
     return res.status(400).json({ message: "Please enter all fields" });
   }
 
+  // Check if user exists
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.status(400).json({ message: 'User not found' });
+  }
+
   try {
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ message: "User not found" });
-    }
     //Compare passwords
     const isMatch = await user.matchPassword(password);
     if (!isMatch) {
